@@ -2,20 +2,20 @@
 
 "use client";
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Download, FileText, BookOpen, Award, Phone, Mail, MessageCircle, 
-  Star, Trophy, Zap, Menu, X
+  Star, Trophy, Zap, Menu, X, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
-// Données du professeur (inchangées)
+// Données du professeur 
 const professorData = {
   name: "Serge Ghislain SAVI",
   photo: "/images/savi1.png",
   description: "Électrotechnicien avec plus de 15 ans d'expérience dans l'enseignement et la recherche. Passionné par la transmission du savoir et l'innovation technologique.",
   contact: {
-    phone: "+229 01484868",
+    phone: "+229 0148484868",
     whatsapp: "+229 0196540120",
     email: "serge12savi@gmail.com"
   },
@@ -62,35 +62,82 @@ const epreuves = [
 const realisationsEtPrix = [
   {
     id: 1,
-    type: 'realisation',
-    title: "Système de Gestion Énergétique Intelligent",
-    date: "2022",
-    description: "Développement d'un système de monitoring énergétique pour les entreprises industrielles.",
-    image: "/images/2.jpeg"
+    type: 'prix',
+    title: "Premier prix",
+    date: "2024",
+    description: "Camp d'excellence 2024",
+    images: [
+      "/images/Camp-excellentce-2024-1.jpeg",
+      "/images/Camp-excellentce-2024-2.png",
+      "/images/Camp-excellentce-2024-3.jpeg"
+    ]
   },
   {
     id: 2,
     type: 'prix',
-    title: "Prix de l'Innovation Technologique",
+    title: "Premier prix",
     date: "2023",
-    description: "Récompensé pour une recherche révolutionnaire en électronique de puissance.",
-    image: "/images/3.jpeg"
-  },
-  {
-    id: 3,
-    type: 'realisation',
-    title: "Prototype de Convertisseur Solaire Avancé",
-    date: "2021",
-    description: "Conception d'un convertisseur solaire à haute efficacité énergétique.",
-    image: "/images/1.jpeg"
+    description: "Camp d'excellence de l'EFTP 2023",
+    images: [
+      "/images/Camp-excellentce-de-EFTP.jpeg"
+    ]
   }
 ];
-
 
 const ProfessorSite = () => {
   const [filter, setFilter] = useState('Tous');
   const [activeRealisationIndex, setActiveRealisationIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Nouvel état pour suivre l'image active dans chaque carousel
+  const [activeImageIndices, setActiveImageIndices] = useState<{[key: number]: number}>({});
+
+  // Initialiser les indices d'image active pour chaque réalisation/prix
+  useEffect(() => {
+    const initialIndices = realisationsEtPrix.reduce((acc, item) => {
+      acc[item.id] = 0;
+      return acc;
+    }, {} as {[key: number]: number});
+    
+    setActiveImageIndices(initialIndices);
+  }, []);
+
+  // Fonction pour passer à l'image suivante d'une réalisation spécifique
+  const nextImage = (realisationId: number) => {
+    setActiveImageIndices(prev => {
+      const currentIndex = prev[realisationId] || 0;
+      const maxIndex = realisationsEtPrix.find(item => item.id === realisationId)?.images.length || 1;
+      return {
+        ...prev,
+        [realisationId]: (currentIndex + 1) % maxIndex
+      };
+    });
+  };
+
+  // Fonction pour passer à l'image précédente d'une réalisation spécifique
+  const prevImage = (realisationId: number) => {
+    setActiveImageIndices(prev => {
+      const currentIndex = prev[realisationId] || 0;
+      const maxIndex = realisationsEtPrix.find(item => item.id === realisationId)?.images.length || 1;
+      return {
+        ...prev,
+        [realisationId]: (currentIndex - 1 + maxIndex) % maxIndex
+      };
+    });
+  };
+
+  // Changement automatique des images toutes les 5 secondes
+  useEffect(() => {
+    const timers = realisationsEtPrix.map(item => {
+      return setInterval(() => {
+        nextImage(item.id);
+      }, 5000);
+    });
+
+    return () => {
+      timers.forEach(timer => clearInterval(timer));
+    };
+  }, [activeImageIndices]);
 
   // Refs pour le défilement
   const epreuvesRef = useRef<HTMLDivElement>(null);
@@ -328,84 +375,139 @@ const ProfessorSite = () => {
             </motion.section>
 
 
+            <motion.section 
+        ref={realisationsRef}
+        id="realisations"
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="container mx-auto px-4 my-16"
+      >
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 className="text-3xl font-bold text-blue-900 mb-8 flex items-center">
+            <Trophy className="mr-4 text-yellow-500" /> 
+            Réalisations & Prix
+          </h2>
 
-            {/* Section Réalisations et Prix */}
-<motion.section 
-  ref={realisationsRef}
-  id="realisations"
-  initial={{ opacity: 0, y: 100 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8 }}
-  className="container mx-auto px-4 my-16"
->
-  <div className="bg-white rounded-2xl shadow-2xl p-8">
-    <h2 className="text-3xl font-bold text-blue-900 mb-8 flex items-center">
-      <Trophy className="mr-4 text-yellow-500" /> 
-      Réalisations & Prix
-    </h2>
-
-    <motion.div 
-      className="grid md:grid-cols-3 gap-6"
-      variants={{
-        hidden: { opacity: 0 },
-        visible: { 
-          opacity: 1,
-          transition: {
-            delayChildren: 0.2,
-            staggerChildren: 0.1
-          }
-        }
-      }}
-      initial="hidden"
-      animate="visible"
-    >
-      {realisationsEtPrix.map((item) => (
-        <motion.div 
-          key={item.id}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { 
-              opacity: 1, 
-              y: 0,
-              transition: { duration: 0.5 }
-            }
-          }}
-          whileHover={{ 
-            scale: 1.05,
-            transition: { duration: 0.3 }
-          }}
-          className="bg-blue-50 rounded-2xl overflow-hidden shadow-lg border border-blue-100 hover:border-blue-300 transition-all"
-        >
-          <div className="relative">
-            <img 
-              src={item.image} 
-              alt={item.title} 
-              className="w-full h-64 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-              <div className="flex items-center mb-1">
-                {item.type === 'prix' ? (
-                  <Star className="mr-2 text-yellow-400" />
-                ) : (
-                  <Zap className="mr-2 text-blue-400" />
-                )}
-                <h3 className="text-xl font-bold">{item.title}</h3>
-              </div>
-              <p className="text-sm text-yellow-200">{item.date}</p>
-            </div>
-          </div>
-          
-          <div className="p-4">
-            <p className="text-gray-700 text-sm">
-              {item.description}
-            </p>
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
-  </div>
-</motion.section>
+          <motion.div 
+            className="grid md:grid-cols-3 gap-6"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { 
+                opacity: 1,
+                transition: {
+                  delayChildren: 0.2,
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            initial="hidden"
+            animate="visible"
+          >
+            {realisationsEtPrix.map((item) => (
+              <motion.div 
+                key={item.id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { duration: 0.5 }
+                  }
+                }}
+                whileHover={{ 
+                  scale: 1.03,
+                  transition: { duration: 0.3 }
+                }}
+                className="bg-blue-50 rounded-2xl overflow-hidden shadow-lg border border-blue-100 hover:border-blue-300 transition-all"
+              >
+                <div className="relative h-64">
+                  {/* Carousel d'images */}
+                  <div className="relative w-full h-full overflow-hidden">
+                    <AnimatePresence mode="wait">
+                      <motion.img 
+                        key={`${item.id}-${activeImageIndices[item.id] || 0}`}
+                        src={item.images[activeImageIndices[item.id] || 0]} 
+                        alt={`${item.title} - Image ${(activeImageIndices[item.id] || 0) + 1}`} 
+                        className="w-full h-64 object-cover"
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </AnimatePresence>
+                    
+                    {/* Boutons de navigation */}
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        prevImage(item.id);
+                      }}
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full text-blue-800 hover:bg-white transition-all"
+                      aria-label="Image précédente"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        nextImage(item.id);
+                      }}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full text-blue-800 hover:bg-white transition-all"
+                      aria-label="Image suivante"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                    
+                    {/* Indicateurs de pagination */}
+                    <div className="absolute bottom-3 left-0 right-0 flex justify-center space-x-2">
+                      {item.images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveImageIndices(prev => ({
+                              ...prev,
+                              [item.id]: index
+                            }));
+                          }}
+                          className={`w-2 h-2 rounded-full transition-all ${
+                            (activeImageIndices[item.id] || 0) === index
+                              ? "bg-white w-4"
+                              : "bg-white/50"
+                          }`}
+                          aria-label={`Aller à l'image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Overlay avec les informations */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
+                    <div className="flex items-center mb-1">
+                      {item.type === 'prix' ? (
+                        <Star className="mr-2 text-yellow-400" />
+                      ) : (
+                        <Zap className="mr-2 text-blue-400" />
+                      )}
+                      <h3 className="text-xl font-bold">{item.title}</h3>
+                    </div>
+                    <p className="text-sm text-yellow-200">{item.date}</p>
+                  </div>
+                </div>
+                
+                <div className="p-4">
+                  <p className="text-gray-700 text-sm">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
       
 
 
