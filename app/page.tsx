@@ -31,31 +31,94 @@ const professorData = {
 const epreuves = [
   {
     id: 1,
-    title: "Circuits Électriques - L1",
-    year: 2023,
+    title: "1D2S Electro_Tle_LTCID_24-25",
+    year: 2024-2025,
     subject: "Électrotechnique",
-    description: "Épreuve comprehensive sur les principes fondamentaux des circuits électriques.",
+    description: "Première série des devoirs surveillés du second semestre",
     icon: "/images/1D2S Electro_Tle_LTCID_24-25.png",
     file: "/docs/1D2S Electro_Tle_LTCID_24-25.pdf"
   },
   {
     id: 2,
-    title: "Machines Électriques - M2",
+    title: "2D1S Electro Tle LTCID 24-25",
     year: 2022,
-    subject: "Électromécanique",
-    description: "Analyse approfondie des principes de fonctionnement des machines électriques.",
-    icon: "/images/1D2S Electro_Tle_LTCID_24-25.png",
-    file: "/docs/1D2S Electro_Tle_LTCID_24-25.pdf"
+    subject: "Électrotechnique",
+    description: "Deuxième série des devoirs surveillés du premier semestre",
+    icon: "/images/2D1S Electro Tle LTCID 24-25.png",
+    file: "/docs/2D1S Electro Tle LTCID 24-25.pdf"
   },
   {
     id: 3,
-    title: "Électronique de Puissance",
-    year: 2024,
-    subject: "Électronique",
-    description: "Étude des systèmes de conversion et de contrôle de l'énergie électrique.",
-    icon: "/images/1D2S Electro_Tle_LTCID_24-25.png",
-    file: "/docs/1D2S Electro_Tle_LTCID_24-25.pdf"
-  }
+    title: "TD ELECTRO Tle F3 et EL 28 mars",
+    year: 2025,
+    subject: "Électrotechnique",
+    description: "",
+    icon: "/images/TD ELECTRO Tle F3 et EL 28 mars.png",
+    file: "/docs/TD ELECTRO Tle F3 et EL 28 mars.pdf"
+  },
+  {
+    id: 4,
+    title: "TD EST Tle F3 28 mars",
+    year: 2025,
+    subject: "EST",
+    description: "",
+    icon: "/images/TD EST Tle F3 28 mars.png",
+    file: "/docs/TD EST Tle F3 28 mars.pdf"
+  },
+  {
+    id: 5,
+    title: "TD MEL TLE F3",
+    year: 2025,
+    subject: "MEL",
+    description: "TRAVAUX DE RENFORCEMENT DE CAPACITES DES APPRENANTS CANDIDATS AU CAP, DT ET BAC",
+    icon: "/images/TD MEL TLE F3.png",
+    file: "/docs/TD MEL TLE F3.pdf"
+  },
+  {
+    id: 6,
+    title: "TD TP 1ère F3",
+    year: 2025,
+    subject: "TP",
+    description: "TRAVAUX DE RENFORCEMENT DE CAPACITES DES APPRENANTS CANDIDATS AU CAP, DT ET BAC",
+    icon: "/images/TD TP 1ère F3.png",
+    file: "/docs/TD TP 1ère F3.pdf"
+  },
+  {
+    id: 7,
+    title: "TD1 ELECTRO TERMO ARCHIMEDE",
+    year: 2025,
+    subject: "Électrotechnique",
+    description: "",
+    icon: "/images/TD1 ELECTRO TERMO ARCHIMEDE.png",
+    file: "/docs/TD1 ELECTRO TERMO ARCHIMEDE.pdf"
+  },
+  {
+    id: 8,
+    title: "TD1 EST Archimède",
+    year: 2025,
+    subject: "EST",
+    description: "",
+    icon: "/images/TD1 EST Archimède.png",
+    file: "/docs/TD1 EST Archimède.pdf"
+  },
+  {
+    id: 9,
+    title: "TD2 ELECTRO TERMO ARCHIMEDE",
+    year: 2025,
+    subject: "Électrotechnique",
+    description: "",
+    icon: "/images/TD2 ELECTRO TERMO ARCHIMEDE.png",
+    file: "/docs/TD2 ELECTRO TERMO ARCHIMEDE.pdf"
+  },
+  {
+    id: 10,
+    title: "TD2 EST Archimède",
+    year: 2025,
+    subject: "EST",
+    description: "",
+    icon: "/images/TD2 EST Archimède.png",
+    file: "/docs/TD2 EST Archimède.pdf"
+  }           
 ];
 
 // Nouvelles données pour Réalisations et Prix
